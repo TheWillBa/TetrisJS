@@ -1,2 +1,2 @@
 # TetrisJS
-A version of tetris written functionally in js
+A version of tetris written in js

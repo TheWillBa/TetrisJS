@@ -29,6 +29,10 @@ function drawBlock(b) {
     ctx.fillStyle = "white";
     ctx.rect(0, 0, canvas.width, canvas.height);
     ctx.fill();
+
+    ctx.beginPath();
+    ctx.font = "30px Arial";
+    ctx.fillText(String(ws.points), xOffset + gridWidthRaw/2, yOffset/2);
   
     drawGrid();
     let blocks = ws.fallenBlocks.concat(ws.activeTetrino.blocks);

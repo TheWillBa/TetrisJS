@@ -20,7 +20,9 @@ canvas.width = xOffset * 2 + gridWidthRaw;
 canvas.height = yOffset * 2 + gridHeightRaw;
 const ctx = canvas.getContext("2d");
 
-
+ctx.beginPath();
+ctx.font = "30px Arial";
+ctx.fillText("hello", xOffset + gridWidthRaw/2, yOffset/2);
 
 
 
