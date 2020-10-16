@@ -6,6 +6,7 @@ class Tetrino {
             this.isDead = false;
             this.template = temp;
     }
+    
 
     tick(game) {
         if (this.canMoveDown(game.fallenBlocks) && !this.isDead) {
@@ -28,10 +29,9 @@ class Tetrino {
     }
 
     moveDown() {
-        for (b of this.blocks) {
-            b.moveDown();
-        }
-        this.pY += blockSize
+        let moved = this.getMovedDown();
+        this.blocks = moved.blocks;
+        this.pY = moved.pY;
     }
 
 
@@ -48,11 +48,9 @@ class Tetrino {
 
     moveSide(dir, lob) {
         if (!this.canMoveSide(dir, lob)) { return; }
-
-        for (b of this.blocks) {
-            b.moveSide(dir);
-        }
-        this.pX += blockSize * dir;
+        let moved = this.getMovedSide(dir);
+        this.pX = moved.pX;
+        this.blocks = moved.blocks;
     }
 
     getRotatedTetrino() {
@@ -72,12 +70,8 @@ class Tetrino {
 
     rotate(fallen) {
         if (!this.canRotate(fallen)) { return; };
-        let rotate = b => new Block((-1 * (b.y - this.pY) + this.pX) - b.size,
-            this.pY + (b.x - this.pX),
-            b.color,
-            b.size);
-
-        this.blocks = this.blocks.map(rotate);
+        let rotated = this.getRotatedTetrino();
+        this.blocks = rotated.blocks;
     }
 }
 

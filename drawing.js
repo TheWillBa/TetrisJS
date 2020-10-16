@@ -31,6 +31,19 @@ function drawBlock(b) {
     let tetrinoToDraw = createTetrino(ws.upcomingTetrino.template, blockSize * 0.25 + gridWidth + xOffset/2,  blockSize * 0.25 + yOffset);
     drawTetrino(tetrinoToDraw);
   }
+
+
+  function drawStored(ws){
+    ctx.beginPath();
+    ctx.strokeStyle = "black";
+    ctx.rect(gridWidth + xOffset/2 , yOffset + 4.5*blockSize, 3.5*blockSize, 4.5*blockSize );
+    ctx.stroke();
+
+    if(ws.stored === null) return;
+
+    let tetrinoToDraw = createTetrino(ws.stored.template, blockSize * 0.25 + gridWidth + xOffset/2 ,  blockSize * 0.25 + yOffset + 4.5*blockSize);
+    drawTetrino(tetrinoToDraw);
+  }
   
   
   function drawWorldState(ws) {
@@ -53,6 +66,7 @@ function drawBlock(b) {
 
 
     drawTetrinoPreview(ws);
+    drawStored(ws);
   }
   
   function drawGrid() {

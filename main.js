@@ -59,6 +59,10 @@ function handleKeyDown(key) {
   else if (key.keyCode == 83) {
     // s  down
   }
+  else if (key.keyCode == 70) {
+    // f  store
+    GAME.storeBlock();
+  }
 
 }
 
