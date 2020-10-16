@@ -78,29 +78,46 @@ let WORLD = new WorldState(t1, [], 10, 10, 0);
 let playing = true;
 
 
-/** 
-function play(){
-  while(playing){
-    WORLD = nextWorldState(WORLD)
-    drawWorldState(WORLD)
-    
-    // handle use input?
+
+
+window.addEventListener("keydown", handleKeyDown);
+
+function handleKeyDown(key){
+  if(key.keyCode == 65){ // switch?
+    // a   left
+    if(tetrinoCanMoveSide(WORLD.activeTetrino, -1, WORLD.fallenBlocks) && playing){
+      WORLD.activeTetrino = moveTetrinoSide(WORLD.activeTetrino, -1);
+    }
+  }
+  else if(key.keyCode == 68){
+    // d  right
+    if(tetrinoCanMoveSide(WORLD.activeTetrino, 1, WORLD.fallenBlocks) && playing){
+      WORLD.activeTetrino = moveTetrinoSide(WORLD.activeTetrino, 1);
+    }
+  }
+  else if(key.keyCode == 87){
+    // w  rotation
+  }
+  else if(key.keyCode == 83){
+    // s  down
+  }
+  else if(key.keyCode == 32){//space pause
+     playing = !playing
   }
 }
-**/
-
-
-
 
 
 window.main = function () {
   window.requestAnimationFrame( main );
   
+  if(playing)
+    {
   // Whatever your main loop needs to do
-  WORLD = nextWorldState(WORLD)
+      WORLD = nextWorldState(WORLD)
   
-  drawWorldState(WORLD)
-  
+      drawWorldState(WORLD)
+  //print(WORLD.activeTetrino.pX)
+   }
 };
 
 main(); // Start the cycle
@@ -192,6 +209,28 @@ function getNewTetrino(location){
 }
 
 
+
+// Tetrino 1|-1 (listof Block) -> Boolean
+// produces true if the tetrino can move left (-1) or right (1)
+
+function tetrinoCanMoveSide(t, dir, lob){
+  let blocksOn = b => ormap(
+    (b_) => b_.x == b.x && b_.y == b.y, lob);
+
+  let inWall = b => (b.x < xOffset) || (b.x >= gridWidth);
+
+  return !(ormap(inWall, moveTetrinoSide(t, dir).blocks) || ormap(blocksOn, moveTetrinoSide(t, dir).blocks))
+}
+
+// Tetrino 1|-1 -> Tetrnio
+// Move the tetrnio left (-1) or right (1)
+
+function moveTetrinoSide(t, dir){
+  let shiftBlock = b => new Block(b.x+b.size*dir, b.y, b.color, b.size);
+  return new Tetrino (t.blocks.map(shiftBlock), t.pX + blockSize*dir, t.pY);
+}
+
+
 //#region Handle drawing
 
 
@@ -201,8 +240,10 @@ function getNewTetrino(location){
 function drawBlock(b){
   ctx.beginPath();
   ctx.fillStyle = b.color;
+  ctx.strokeStyle = "black";
   ctx.rect(b.x, b.y, b.size, b.size);
   ctx.fill();  
+  ctx.stroke();
 }
 //drawBlock(b1);
 //drawBlock(b2);
