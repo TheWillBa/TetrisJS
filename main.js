@@ -12,27 +12,22 @@ const blockSize = 30;
 const gridWidthRaw = gridX * blockSize;
 const gridHeightRaw = gridY * blockSize;
 
-const gridWidth = gridWidthRaw + xOffset;
 const gridHeight = gridHeightRaw + yOffset;
+const gridWidth = gridWidthRaw + xOffset;
 
 const canvas = document.getElementById("canvas");
-canvas.width = xOffset * 2 + gridWidthRaw;
+canvas.width = xOffset * 4 + gridWidthRaw;
 canvas.height = yOffset * 2 + gridHeightRaw;
 const ctx = canvas.getContext("2d");
 
-ctx.beginPath();
-ctx.font = "30px Arial";
-ctx.fillText("hello", xOffset + gridWidthRaw/2, yOffset/2);
 
-
-
-
+ 
 
 
 // Entry into the game
 
-const GAME = new Game(getNewTetrino(xOffset + gridWidthRaw / 2, yOffset), [], 10, 10, 0);
-// Use and modify a global world variable to assure that input modifications are not missed
+const GAME = new Game(10);
+
 let playing = true;
 
 
@@ -41,6 +36,11 @@ let playing = true;
 window.addEventListener("keydown", handleKeyDown);
 
 function handleKeyDown(key) {
+
+  if (key.keyCode == 32) {//space pause
+    playing = !playing
+  }
+
   if (!playing) return;
 
   if (key.keyCode == 65) { // switch?
@@ -59,9 +59,7 @@ function handleKeyDown(key) {
   else if (key.keyCode == 83) {
     // s  down
   }
-  else if (key.keyCode == 32) {//space pause
-    playing = !playing
-  }
+
 }
 
 

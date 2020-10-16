@@ -35,7 +35,8 @@ function createTetrino(temp, x, y) {
 
     return new Tetrino(generateTemplateBlocks(temp.locations),
         x + temp.pX * blockSize,
-        y + temp.pY * blockSize)
+        y + temp.pY * blockSize,
+        temp)
 }
 
 

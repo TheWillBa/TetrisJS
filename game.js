@@ -3,13 +3,14 @@ const points = [40, 100, 300, 1200]
 
 
 class Game {
-    constructor(activeTetrino, fallenBlocks, fallTimer, currentTime, points) {
-      this.activeTetrino = activeTetrino,
-        this.fallenBlocks = fallenBlocks,
+    constructor(fallTimer) {
+      this.activeTetrino = getNewTetrino(xOffset + gridWidthRaw / 2, yOffset),
+        this.fallenBlocks = [],
         this.fallTimer = fallTimer,
-        this.currentTime = currentTime,
-        this.points = points,
+        this.currentTime = fallTimer,
+        this.points = 0,
         this.linesCleared = 0
+        this.upcomingTetrino = getNewTetrino(xOffset + gridWidthRaw / 2, yOffset);
     }
 
     level(){
@@ -26,7 +27,8 @@ class Game {
   
     resetActiveBlock() {
       this.fallenBlocks = this.fallenBlocks.concat(this.activeTetrino.blocks);
-      this.activeTetrino = getNewTetrino(xOffset + gridWidthRaw / 2, yOffset);
+      this.activeTetrino = this.upcomingTetrino;
+      this.upcomingTetrino = getNewTetrino(xOffset + gridWidthRaw / 2, yOffset)
     }
 
     addPoints(){

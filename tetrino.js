@@ -1,9 +1,10 @@
 class Tetrino {
-    constructor(blocks, pX, pY) {
+    constructor(blocks, pX, pY, temp) {
         this.pX = pX,
             this.blocks = blocks,
             this.pY = pY,
             this.isDead = false;
+            this.template = temp;
     }
 
     tick(game) {
@@ -22,7 +23,8 @@ class Tetrino {
     getMovedDown() {
         return new Tetrino(this.blocks.map(b => b.getMovedDown()),
             this.pX,
-            this.pY + blockSize)
+            this.pY + blockSize,
+            this.template)
     }
 
     moveDown() {
@@ -40,7 +42,8 @@ class Tetrino {
 
     getMovedSide(dir) {
 
-        return new Tetrino(this.blocks.map(b => b.getMovedSide(dir)), this.pX + blockSize * dir, this.pY);
+        return new Tetrino(this.blocks.map(b => b.getMovedSide(dir)), this.pX + blockSize * dir, this.pY,
+        this.template);
     }
 
     moveSide(dir, lob) {
@@ -59,7 +62,8 @@ class Tetrino {
             b.size);
 
 
-        return new Tetrino(this.blocks.map(rotate), this.pX, this.pY);
+        return new Tetrino(this.blocks.map(rotate), this.pX, this.pY,
+        this.template);
     }
 
     canRotate(fallen) {

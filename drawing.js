@@ -21,6 +21,16 @@ function drawBlock(b) {
       drawBlock(b);
     }
   }
+
+  function drawTetrinoPreview(ws){
+    ctx.beginPath();
+    ctx.strokeStyle = "black";
+    ctx.rect(gridWidth + xOffset/2, yOffset, 3.5*blockSize, 4.5*blockSize );
+    ctx.stroke();
+
+    let tetrinoToDraw = createTetrino(ws.upcomingTetrino.template, blockSize * 0.25 + gridWidth + xOffset/2,  blockSize * 0.25 + yOffset);
+    drawTetrino(tetrinoToDraw);
+  }
   
   
   function drawWorldState(ws) {
@@ -30,14 +40,19 @@ function drawBlock(b) {
     ctx.rect(0, 0, canvas.width, canvas.height);
     ctx.fill();
 
-    ctx.beginPath();
-    ctx.font = "30px Arial";
-    ctx.fillText(String(ws.points), xOffset + gridWidthRaw/2, yOffset/2);
+   
   
     drawGrid();
     let blocks = ws.fallenBlocks.concat(ws.activeTetrino.blocks);
     drawListOfBlocks(blocks);
     drawGrid();
+
+    ctx.fillStyle = "black";
+    ctx.font = "30px Arial";
+    ctx.fillText(ws.points,xOffset + gridWidthRaw/2, yOffset/1.5);
+
+
+    drawTetrinoPreview(ws);
   }
   
   function drawGrid() {
