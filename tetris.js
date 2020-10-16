@@ -71,7 +71,7 @@ let blocks1 = [new Block(xOffset+blockSize, yOffset, "purple", blockSize),
                 new Block(xOffset, yOffset+blockSize, "purple", blockSize),
                 new Block(xOffset+blockSize*2, yOffset+blockSize, "purple", blockSize)];
 
-let t1 = new Tetrino(blocks1, 65, 40);
+let t1 = new Tetrino(blocks1, xOffset + blockSize + blockSize/2, yOffset + blockSize + blockSize/2);
 
 let WORLD = new WorldState(t1, [], 10, 10, 0);
 // Use and modify a global world variable to assure that input modifications are not missed
@@ -97,6 +97,9 @@ function handleKeyDown(key){
   }
   else if(key.keyCode == 87){
     // w  rotation
+    if(tetrinoCanRotate(WORLD.activeTetrino, WORLD.fallenBlocks) && playing){
+      WORLD.activeTetrino = rotateTetrino(WORLD.activeTetrino);
+    }
   }
   else if(key.keyCode == 83){
     // s  down
@@ -210,7 +213,7 @@ function getNewTetrino(location){
 
 
 
-// Tetrino 1|-1 (listof Block) -> Boolean
+// Tetrino 1|-1 (listof Block) ->  Boolean
 // produces true if the tetrino can move left (-1) or right (1)
 
 function tetrinoCanMoveSide(t, dir, lob){
@@ -230,6 +233,31 @@ function moveTetrinoSide(t, dir){
   return new Tetrino (t.blocks.map(shiftBlock), t.pX + blockSize*dir, t.pY);
 }
 
+
+// Tetrino (listof Block) -> Boolean
+// returns true if the tetrino can rotate
+
+function tetrinoCanRotate(t, lob){
+  let blocksOn = b => ormap(
+    (b_) => b_.x == b.x && b_.y == b.y, lob);
+
+  let outOfBounds = b => (b.x < xOffset) || (b.x >= gridWidth) || b.y < yOffset || b.y >= gridHeight;
+
+  return !(ormap(outOfBounds, rotateTetrino(t).blocks) || ormap(blocksOn, rotateTetrino(t).blocks))
+}
+
+
+// Tetrino -> Tetrino
+// produces a new tetrino rotated 90 deg
+function rotateTetrino(t){
+  let rotate = b => new Block((-1*(b.y - t.pY) + t.pX) - b.size,
+                               t.pY + ( b.x-t.pX), 
+                               b.color, 
+                               b.size);
+
+
+  return new Tetrino (t.blocks.map(rotate), t.pX, t.pY);
+}
 
 //#region Handle drawing
 
