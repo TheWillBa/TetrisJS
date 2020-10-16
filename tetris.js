@@ -57,13 +57,13 @@ const templates = [TempT, TempI, TempJ, TempL, TempL, TempO, TempS, TempZ]
 // TetrinoTemplate Natural -> Tetrino
 // produces a tetrino based on the template at a given location
 
-function createTetrino(temp, location){
+function createTetrino(temp, x, y){
 
   let remainder = (n,v) => n-v*Math.floor(n/v);
   let quotient =  (n,v) => Math.floor(n/v);
 
-  let positionToBlock = n => new Block(location + blockSize * remainder(n,4),
-                                        location + blockSize * quotient(n,4),
+  let positionToBlock = n => new Block(x + blockSize * remainder(n,4),
+                                        y + blockSize * quotient(n,4),
                                         temp.color,
                                         blockSize)
 
@@ -71,8 +71,8 @@ function createTetrino(temp, location){
   let generateTemplateBlocks = lob => lob.map(positionToBlock);
 
   return new Tetrino(generateTemplateBlocks(temp.locations),
-                     location + temp.pX * blockSize,
-                     location + temp.pY * blockSize)
+                     x + temp.pX * blockSize,
+                     y + temp.pY * blockSize)
 }
 
 class Tetrino {
@@ -97,14 +97,7 @@ class WorldState {
 
 // Entry into the game
 
-let blocks1 = [new Block(xOffset+blockSize, yOffset, "purple", blockSize),
-                new Block(xOffset+blockSize, yOffset+blockSize, "purple", blockSize),
-                new Block(xOffset, yOffset+blockSize, "purple", blockSize),
-                new Block(xOffset+blockSize*2, yOffset+blockSize, "purple", blockSize)];
-
-let t1 = new Tetrino(blocks1, xOffset + blockSize + blockSize/2, yOffset + blockSize + blockSize/2);
-
-let WORLD = new WorldState(t1, [], 10, 10, 0);
+let WORLD = new WorldState(getNewTetrino(xOffset + gridWidthRaw/2, yOffset), [], 10, 10, 0);
 // Use and modify a global world variable to assure that input modifications are not missed
 let playing = true;
 
@@ -172,7 +165,7 @@ function nextWorldState(ws){
                             ws.points);                     
     }
     else{
-      return new WorldState(getNewTetrino(xOffset),
+      return new WorldState(getNewTetrino(xOffset + gridWidthRaw/2, yOffset),
                             ws.fallenBlocks.concat(ws.activeTetrino.blocks),
                             ws.fallTimer,
                             ws.fallTimer,
@@ -238,8 +231,8 @@ function nextBlock(b){
 // Natural -> Tetrino
 // produces a random tetrino at location given
 
-function getNewTetrino(location){
-  return createTetrino(templates[Math.floor(Math.random() * templates.length)],location)
+function getNewTetrino(x ,y){
+  return createTetrino(templates[Math.floor(Math.random() * templates.length)],x,y)
 }
 
 
