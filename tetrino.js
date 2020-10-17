@@ -1,3 +1,8 @@
+
+
+const stickMaxTime = 2;
+
+
 class Tetrino {
     constructor(blocks, pX, pY, temp) {
         this.pX = pX,
@@ -5,15 +10,21 @@ class Tetrino {
             this.pY = pY,
             this.isDead = false;
             this.template = temp;
+            this.currentStickTime = stickMaxTime;
     }
     
 
     tick(game) {
+        
         if (this.canMoveDown(game.fallenBlocks) && !this.isDead) {
             this.moveDown();
         }
-        else {
+        else if(this.currentStickTime <= 0){
             this.isDead = true;
+        }
+        else{
+            console.log(this.currentStickTime);
+            this.currentStickTime--;
         }
     }
 
@@ -72,6 +83,18 @@ class Tetrino {
         if (!this.canRotate(fallen)) { return; };
         let rotated = this.getRotatedTetrino();
         this.blocks = rotated.blocks;
+    }
+
+    smashDown(fallen){
+        let t = new Tetrino(this.blocks, this.pX, this.pY, this.temp);
+        while(t.canMoveDown(fallen)){
+            t.moveDown();
+        }
+        this.currentStickTime = 0;
+        this.blocks = t.blocks;
+        this.pX = t.pX;
+        this.pY = t.pY;
+
     }
 }
 

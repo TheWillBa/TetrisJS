@@ -13,6 +13,12 @@ class Game {
         this.upcomingTetrino = getNewTetrino(xOffset + gridWidthRaw / 2, yOffset);
         this.stored = null;
         this.haveStored = false;
+        this.gameOver = false;
+    }
+
+    fallTimerDynamic() {
+        let dynamic = this.fallTimer - this.level();
+        return dynamic > 0 ? dynamic : 0;
     }
 
     level() {
@@ -20,7 +26,7 @@ class Game {
     }
 
     resetFallTimer() {
-        this.currentTime = this.fallTimer;
+        this.currentTime = this.fallTimerDynamic();
     }
 
     decrementFallTimer() {
@@ -34,13 +40,13 @@ class Game {
         this.newUpcomingTetrino();
     }
 
-    newUpcomingTetrino(){
+    newUpcomingTetrino() {
         this.upcomingTetrino = getNewTetrino(xOffset + gridWidthRaw / 2, yOffset);
     }
 
     addPoints() {
         this.points += points[this.numFullLines() - 1] * (this.level() + 1)
-        console.log(this.points);
+
     }
 
     numFullLines() {
@@ -73,42 +79,50 @@ class Game {
 
     storeBlock() {
         if (!this.haveStored) {
-           // Can be optimized
+            // Can be optimized
 
-           let fromStorage = this.stored;
-           let next;
-           this.stored = createTetrino(this.activeTetrino.template,xOffset + gridWidthRaw / 2, yOffset);
+            let fromStorage = this.stored;
 
-            if(fromStorage === null){
-                next = this.upcomingTetrino;
+            if (fromStorage === null) {
+                let next = this.upcomingTetrino;
+                this.stored = createTetrino(this.activeTetrino.template, xOffset + gridWidthRaw / 2, yOffset);
+                this.activeTetrino = next;
                 this.newUpcomingTetrino();
             }
-            else{
-                next = this.stored;
-
+            else {
+                let next = this.stored;
+                this.stored = this.stored = createTetrino(this.activeTetrino.template, xOffset + gridWidthRaw / 2, yOffset);
+                this.activeTetrino = next;
+                this.haveStored = true;
             }
-            this.activeTetrino = next;
-            this.haveStored = true;
+
             return;
         }
     }
 
     tick() {
-        if (this.currentTime <= 0) {
-            this.activeTetrino.tick(this)
-            if (this.activeTetrino.isDead) {
-                this.resetActiveBlock();
+        if (!this.upcomingTetrino.canMoveDown(this.fallenBlocks)) { 
+            this.gameOver = true; 
 
-                if (this.numFullLines() > 0) {
-                    this.addPoints();
-                    this.clearLines();
-                }
-
-            }
-            this.resetFallTimer();
         }
-        else { // block cannot move because of timer
-            this.decrementFallTimer()
+
+        if (!this.gameOver) {
+            if (this.currentTime <= 0) {
+                this.activeTetrino.tick(this)
+                if (this.activeTetrino.isDead) {
+                    this.resetActiveBlock();
+
+                    if (this.numFullLines() > 0) {
+                        this.addPoints();
+                        this.clearLines();
+                    }
+
+                }
+                this.resetFallTimer();
+            }
+            else {
+                this.decrementFallTimer()
+            }
         }
     }
 }

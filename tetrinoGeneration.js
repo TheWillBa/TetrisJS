@@ -7,6 +7,11 @@ class TetrinoTemplate {
     }
 }
 
+// 00 01 02 03
+// 04 05 06 07
+// 08 09 10 11
+// 12 13 14 15
+
 const TempT = new TetrinoTemplate([1, 5, 4, 6], 1.5, 1.5, "purple");
 const TempI = new TetrinoTemplate([0, 4, 8, 12], 0.5, 1.5, "lightblue");
 const TempJ = new TetrinoTemplate([0, 5, 4, 6], 1.5, 1.5, "blue");

@@ -67,6 +67,12 @@ function drawBlock(b) {
 
     drawTetrinoPreview(ws);
     drawStored(ws);
+
+    if(ws.gameOver){
+        ctx.fillStyle = "black";
+        ctx.font = "30px Arial";
+        ctx.fillText("Game Over", canvas.width/2, canvas.height/2);
+    }
   }
   
   function drawGrid() {

@@ -26,7 +26,7 @@ const ctx = canvas.getContext("2d");
 
 // Entry into the game
 
-const GAME = new Game(10);
+let GAME = new Game(10);
 
 let playing = true;
 
@@ -37,7 +37,7 @@ window.addEventListener("keydown", handleKeyDown);
 
 function handleKeyDown(key) {
 
-  if (key.keyCode == 32) {//space pause
+  if (key.keyCode == 81) {//space pause
     playing = !playing
   }
 
@@ -62,6 +62,15 @@ function handleKeyDown(key) {
   else if (key.keyCode == 70) {
     // f  store
     GAME.storeBlock();
+  }
+  else if (key.keyCode == 32) {
+    // space smash
+    GAME.activeTetrino.smashDown(GAME.fallenBlocks);
+  }
+
+  else if (key.keyCode == 82) {
+    // r reset
+    GAME = new Game(10);
   }
 
 }
