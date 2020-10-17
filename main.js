@@ -22,11 +22,11 @@ const ctx = canvas.getContext("2d");
 
 
  
-
+const speed = 15;
 
 // Entry into the game
 
-let GAME = new Game(10);
+let GAME = new Game(speed);
 
 let playing = true;
 
@@ -39,6 +39,11 @@ function handleKeyDown(key) {
 
   if (key.keyCode == 81) {//space pause
     playing = !playing
+  }
+
+  if (key.keyCode == 82) {
+    // r reset
+    GAME = new Game(speed);
   }
 
   if (!playing) return;
@@ -68,10 +73,7 @@ function handleKeyDown(key) {
     GAME.activeTetrino.smashDown(GAME.fallenBlocks);
   }
 
-  else if (key.keyCode == 82) {
-    // r reset
-    GAME = new Game(10);
-  }
+
 
 }
 
@@ -86,6 +88,7 @@ window.main = function () {
     // Whatever your main loop needs to do
     GAME.tick();
     drawWorldState(GAME);
+    playing = !GAME.gameOver;
     //print(WORLD.activeTetrino.pX)
   }
 };
